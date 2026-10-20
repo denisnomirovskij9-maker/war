@@ -1,0 +1,366 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BLADE ARENA — Игровой проект</title>
+<style>
+:root {
+  --bg:#0a0b10; --panel:#12141d; --line:#252938;
+  --text:#f5f6fc; --muted:#898fa3;
+  --accent:#8b5cf6; --blue:#43b9ff;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
+}
+button,input{font:inherit}
+button,a{ -webkit-tap-highlight-color:transparent }
+a{color:inherit;text-decoration:none}
+header{
+  position:sticky;top:0;z-index:10;
+  background:#0a0b10ed;backdrop-filter:blur(15px);
+  border-bottom:1px solid var(--line);
+}
+.nav{
+  max-width:1180px;margin:auto;padding:17px 22px;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:20px;
+}
+.logo{font-size:22px;font-weight:900;letter-spacing:2px}
+.logo span{color:var(--accent)}
+.links{display:flex;gap:23px;color:var(--muted);font-size:14px}
+.links a:hover,.links a.active{color:white}
+.btn{
+  border:1px solid var(--line);border-radius:9px;
+  padding:12px 16px;background:#191c28;color:white;
+  cursor:pointer;transition:.2s;
+}
+.btn:hover{border-color:var(--accent);transform:translateY(-1px)}
+.btn.primary{background:var(--accent);border-color:var(--accent)}
+main{max-width:1180px;margin:auto;padding:0 22px}
+.hero{
+  padding:75px 0 42px;text-align:center;
+  background:radial-gradient(ellipse at 50% 20%,#713be52c,transparent 65%);
+}
+.eyebrow{
+  color:#bba5ff;font-size:12px;letter-spacing:3px;
+  text-transform:uppercase;
+}
+h1{font-size:clamp(39px,8vw,76px);margin:22px 0 14px;
+  letter-spacing:-2px}
+h1 span{
+  background:linear-gradient(90deg,#a78bfa,#42c7ff);
+  color:transparent;background-clip:text;
+}
+.subtitle{color:var(--muted);line-height:1.8;max-width:570px;
+  margin:0 auto 25px}
+.actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.section{padding:32px 0}
+.section-head{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:15px;margin-bottom:20px;
+}
+h2{font-size:23px;margin:0}
+.small{font-size:13px;color:var(--muted)}
+.server-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+.card{
+  background:linear-gradient(145deg,#151824,#101119);
+  border:1px solid var(--line);border-radius:14px;
+  padding:21px;min-width:0;transition:.2s;
+}
+.card:hover{border-color:#7254b9;transform:translateY(-3px)}
+.server-top{display:flex;justify-content:space-between;gap:10px}
+.server-icon{
+  width:45px;height:45px;display:grid;place-items:center;
+  border-radius:12px;background:#8b5cf620;
+  color:#bba5ff;font-size:21px;font-weight:bold;
+}
+.status{font-size:11px;color:#65e5ac}
+.status:before{content:"";display:inline-block;width:6px;height:6px;
+  background:#4ee5a0;border-radius:50%;margin-right:6px}
+.card h3{margin:19px 0 8px;font-size:18px}
+.card p{color:var(--muted);font-size:13px;line-height:1.6}
+.server-bottom{display:flex;justify-content:space-between;
+  align-items:center;border-top:1px solid var(--line);
+  padding-top:15px;margin-top:18px;gap:8px}
+.players{font-size:13px;color:#b6bdd0}
+.server-bottom .btn{padding:10px;font-size:12px}
+.stats{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  border:1px solid var(--line);border-radius:14px;
+  background:var(--panel);overflow:hidden;
+}
+.stat{text-align:center;padding:24px 8px}
+.stat+.stat{border-left:1px solid var(--line)}
+.stat strong{font-size:26px;display:block;margin-bottom:8px}
+.stat span{font-size:12px;color:var(--muted)}
+.store-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+.vip{font-size:27px;font-weight:900;margin:18px 0 8px}
+.vip.purple{color:#b49aff}
+.vip.blue{color:#61c9ff}
+.vip.gold{color:#f4c96a}
+.price{font-size:22px;font-weight:bold;margin:22px 0 14px}
+.price small{font-size:12px;color:var(--muted);font-weight:normal}
+.full{width:100%}
+.news-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}
+.news-art{
+  height:100px;border-radius:10px;margin-bottom:16px;
+  background:radial-gradient(ellipse at 70% 30%,#8652e577,transparent 60%),#1b1c2b;
+  display:flex;align-items:center;justify-content:center;
+  font-size:35px;
+}
+footer{border-top:1px solid var(--line);margin-top:45px}
+.footer-inner{
+  max-width:1180px;margin:auto;padding:30px 22px;
+  display:flex;justify-content:space-between;gap:20px;
+  color:var(--muted);font-size:12px;flex-wrap:wrap;
+}
+.page{display:none;animation:appear .25s ease}
+.page.active{display:block}
+@keyframes appear{from{opacity:0;transform:translateY(5px)}
+to{opacity:1;transform:translateY(0)}}
+.search{
+  width:100%;max-width:260px;padding:12px;
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:9px;color:white;outline:none;
+}
+.search:focus{border-color:var(--accent)}
+.empty{display:none;color:var(--muted);padding:25px 0}
+@media(max-width:760px){
+  .links{gap:12px;overflow-x:auto}
+  .nav{flex-wrap:wrap}
+  .nav .links{order:3;width:100%;padding-top:5px}
+  .nav .links a{white-space:nowrap}
+  .server-grid,.store-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .stat:nth-child(3){border-left:0;border-top:1px solid var(--line)}
+  .stat:nth-child(4){border-top:1px solid var(--line)}
+}
+@media(max-width:480px){
+  main{padding:0 15px}
+  .hero{padding-top:55px}
+  .server-grid,.store-grid,.news-grid{grid-template-columns:1fr}
+  .section-head{align-items:flex-start;flex-direction:column}
+  .search{max-width:none}
+  h1{letter-spacing:-1px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="nav">
+    <a class="logo" href="#home" onclick="showPage('home')">
+      BLADE<span>ARENA</span>
+    </a>
+    <nav class="links">
+      <a href="#home" data-page="home" class="active">Главная</a>
+      <a href="#servers" data-page="servers">Серверы</a>
+      <a href="#store" data-page="store">Магазин</a>
+      <a href="#stats" data-page="stats">Статистика</a>
+      <a href="#news" data-page="news">Новости</a>
+    </nav>
+    <button class="btn primary" onclick="showPage('servers')">Играть ↗</button>
+  </div>
+</header>
+
+<main>
+  <section id="home" class="page active">
+    <div class="hero">
+      <div class="eyebrow">✦ Твой новый игровой уровень</div>
+      <h1>ИГРАЙ БЕЗ <span>ГРАНИЦ</span></h1>
+      <p class="subtitle">
+        Добро пожаловать в BLADE ARENA.
+        Твоя игра. Твои правила. Твоя команда.
+      </p>
+      <div class="actions">
+        <button class="btn primary" onclick="showPage('servers')">
+          Выбрать сервер →
+        </button>
+        <button class="btn" onclick="showPage('store')">
+          Открыть магазин
+        </button>
+      </div>
+    </div>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>Наши серверы</h2>
+        <a href="#servers" onclick="showPage('servers')" class="small">
+          Все серверы →
+        </a>
+      </div>
+      <div class="server-grid" id="homeServers"></div>
+    </section>
+
+    <section class="section" id="stats">
+      <div class="section-head"><h2>Проект в цифрах</h2></div>
+      <div class="stats">
+        <div class="stat"><strong>4</strong><span>Игровых режима</span></div>
+        <div class="stat"><strong>24/7</strong><span>Доступ к игре</span></div>
+        <div class="stat"><strong>0</strong><span>Текущих игроков*</span></div>
+        <div class="stat"><strong>100%</strong><span>Игровая атмосфера</span></div>
+      </div>
+      <p class="small">* Демонстрационные данные, не подключены к серверам.</p>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><h2>Почему мы?</h2></div>
+      <div class="news-grid">
+        <article class="card">
+          <div class="news-art">⚡</div>
+          <h3>Быстрый старт</h3>
+          <p>Выбирай режим и присоединяйся к игровому сообществу.</p>
+        </article>
+        <article class="card">
+          <div class="news-art">✦</div>
+          <h3>Своя атмосфера</h3>
+          <p>Современный интерфейс, удобная навигация и события проекта.</p>
+        </article>
+      </div>
+    </section>
+  </section>
+
+  <section id="servers" class="page">
+    <div class="section" style="padding-top:45px">
+      <div class="section-head">
+        <div><h2>Игровые серверы</h2><p class="small">Выбери свой режим</p></div>
+        <input class="search" id="serverSearch" placeholder="Поиск серверов..."
+          oninput="renderServers()">
+      </div>
+      <div class="server-grid" id="allServers"></div>
+      <p id="emptyServers" class="empty">Ничего не найдено.</p>
+    </div>
+  </section>
+
+  <section id="store" class="page">
+    <div class="section" style="padding-top:45px">
+      <div class="section-head">
+        <div><h2>Магазин проекта</h2><p class="small">Демонстрационные карточки</p></div>
+      </div>
+      <div class="store-grid">
+        <article class="card">
+          <div class="vip purple">VIP</div>
+          <p>Стартовый уровень привилегий.</p>
+          <div class="price">49 <small>условных кредитов / мес.</small></div>
+          <button class="btn full" onclick="buyInfo('VIP')">Подробнее</button>
+        </article>
+        <article class="card">
+          <div class="vip blue">PREMIUM</div>
+          <p>Расширенный профиль участника.</p>
+          <div class="price">99 <small>условных кредитов / мес.</small></div>
+          <button class="btn full" onclick="buyInfo('PREMIUM')">Подробнее</button>
+        </article>
+        <article class="card">
+          <div class="vip gold">LEGEND</div>
+          <p>Особый статус сообщества.</p>
+          <div class="price">149 <small>условных кредитов / мес.</small></div>
+          <button class="btn full" onclick="buyInfo('LEGEND')">Подробнее</button>
+        </article>
+      </div>
+      <p class="small">Покупки пока не подключены. Оплата и выдача привилегий не работают.</p>
+    </div>
+  </section>
+
+  <section id="news" class="page">
+    <div class="section" style="padding-top:45px">
+      <h2>Новости проекта</h2>
+      <div class="news-grid" style="margin-top:22px">
+        <article class="card">
+          <div class="news-art">🚀</div>
+          <span class="small">20 октября 2026</span>
+          <h3>Добро пожаловать!</h3>
+          <p>Начинаем развитие нового игрового сообщества.</p>
+        </article>
+        <article class="card">
+          <div class="news-art">🎮</div>
+          <span class="small">Скоро</span>
+          <h3>Новые игровые режимы</h3>
+          <p>Следи за обновлениями и развитием проекта.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <a class="logo" href="#home" onclick="showPage('home')">
+      BLADE<span>ARENA</span>
+    </a>
+    <span>Фанатский демонстрационный макет · 2026</span>
+    <span>© BLADE ARENA</span>
+  </div>
+</footer>
+
+<script>
+const servers = [
+  {name:"PUBLIC FUN",mode:"FUN",icon:"✦",players:0,max:32},
+  {name:"PUBLIC",mode:"CLASSIC",icon:"◈",players:0,max:32},
+  {name:"DEATHMATCH",mode:"DM",icon:"⚡",players:0,max:24},
+  {name:"DUELS",mode:"1 VS 1",icon:"↔",players:0,max:16},
+  {name:"ARENA",mode:"ARENA",icon:"◎",players:0,max:24},
+  {name:"CASUAL",mode:"CASUAL",icon:"✧",players:0,max:32}
+];
+
+function serverCard(s){
+  return `<article class="card">
+    <div class="server-top">
+      <div class="server-icon">${s.icon}</div>
+      <span class="status">Макет</span>
+    </div>
+    <h3>${s.name}</h3>
+    <p>Режим: ${s.mode}<br>Играй вместе с сообществом BLADE ARENA.</p>
+    <div class="server-bottom">
+      <span class="players">${s.players}/${s.max} игроков*</span>
+      <button class="btn" onclick="copyIP()">Копировать IP</button>
+    </div>
+  </article>`;
+}
+
+function renderServers(){
+  const q=(document.getElementById("serverSearch")?.value||"").toLowerCase();
+  const filtered=servers.filter(s=>(s.name+" "+s.mode).toLowerCase().includes(q));
+  document.getElementById("allServers").innerHTML=filtered.map(serverCard).join("");
+  document.getElementById("emptyServers").style.display=filtered.length?"none":"block";
+}
+
+document.getElementById("homeServers").innerHTML=servers.slice(0,3).map(serverCard).join("");
+renderServers();
+
+function showPage(id){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  const page=document.getElementById(id);
+  if(page) page.classList.add("active");
+  document.querySelectorAll("[data-page]").forEach(a=>{
+    a.classList.toggle("active",a.dataset.page===id);
+  });
+  if(id==="stats") document.getElementById("stats").scrollIntoView({behavior:"smooth"});
+  else window.scrollTo({top:0,behavior:"smooth"});
+}
+
+document.querySelectorAll("[data-page]").forEach(a=>{
+  a.addEventListener("click",e=>{
+    e.preventDefault();showPage(a.dataset.page);
+  });
+});
+
+async function copyIP(){
+  const ip="IP_ТВОЕГО_СЕРВЕРА";
+  try{
+    await navigator.clipboard.writeText(ip);
+    alert("Демо-IP скопирован. Замени его на адрес своего сервера.");
+  }catch(e){
+    prompt("Скопируй IP своего сервера:",ip);
+  }
+}
+
+function buyInfo(name){
+  alert(name+": демонстрационная привилегия. Магазин пока не подключён.");
+}
+</script>
+</body>
+</html>
